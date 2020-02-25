@@ -1,0 +1,15 @@
+{
+    "name": "qwert/todo",
+    "authors": [
+        {
+            "name": "MoZg0",
+            "email": "HackedCloud@gmail.com"
+        }
+    ],
+    "require": {},
+	"autoload": {
+        "psr-4": {
+             "Core\\": "Core/"
+        }
+    }
+}
