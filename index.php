@@ -8,7 +8,7 @@
 /**
  * Composer
  */
-require dirname(__DIR__) . '/vendor/autoload.php';
+require 'vendor\autoload.php';
 
 /**
  * Error and Exception handling
@@ -27,6 +27,11 @@ ini_set("error_log", "PHPErrors.log");
 ignore_user_abort(false);
 
 
+//$val = \Core\UrlChecker\UrlValidator\UrlValidator::ValidateUrl('../../img.png');
+//var_dump($val);
+//exit;
+
+
 $linksArray = array(
 	'https://wcm.ecentria.tools/PLC_P/CreateFiles_PL/create-new.php',
 	'',
@@ -35,4 +40,5 @@ $linksArray = array(
 );
 
 $check = new Core\UrlChecker\UrlChecker();
-$check->getBrokenImages($linksArray);
+var_dump($check->getBrokenImages($linksArray));
+var_dump($check->getAllLinks($linksArray));

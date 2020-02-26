@@ -1,7 +1,6 @@
 <?php
 
 namespace Core\HtmlDom;
-
 /**
  * Website: http://sourceforge.net/projects/simplehtmldom/
  * Additional projects: http://sourceforge.net/projects/debugobject/
@@ -125,6 +124,7 @@ function dump_html_tree($node, $show_attr = true, $deep = 0)
 {
 	$node->dump($node);
 }
+
 
 class simple_html_dom_node
 {
@@ -1464,7 +1464,7 @@ class simple_html_dom
 		$options = 0)
 	{
 		if ($str) {
-			if (preg_match('/^http:\/\//i', $str) || is_file($str)) {
+			if (preg_match('/^http:\/\//i', $str)) {
 				$this->load_file($str);
 			} else {
 				$this->load(

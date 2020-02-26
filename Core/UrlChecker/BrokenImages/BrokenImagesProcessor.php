@@ -1,36 +1,63 @@
 <?php
 
-namespace BrokenImages;
+namespace Core\UrlChecker\BrokenImages;
 
 use Core\cUrl\curl;
-use Core\HtmlDom;
+use Core\HtmlDom\simple_html_dom;
+use Core\UrlChecker\UrlValidator\UrlValidator;
 
+/**
+ * Class BrokenImagesProcessor
+ * @package Core\UrlChecker\BrokenImages
+ */
 class BrokenImagesProcessor
 {
+	/**
+	 * @var string Url
+	 */
 	private $url = '';
 
+	/**
+	 * @var array Broken Images Links
+	 */
+	private $brokenImagesLinks = array();
+
+	/**
+	 * BrokenImagesProcessor constructor.
+	 * @param $url string Url
+	 */
 	public function __construct($url)
 	{
 		$this->url = $url;
 	}
 
+	/**
+	 * Find All Broken Images on the site
+	 *
+	 * @return array
+	 */
 	public function FindBrokenImages()
 	{
 		try {
-			$brokenImagesLinks = array();
-
 			$html = curl::URLDownloadToVar($this->url);
-			$html = str_get_html($html);
-			foreach ($html->find('img src') as $foundImgUrl) {
-				var_dump($foundImgUrl);
-				$isValid = \Core\UrlChecker\UrlValidator\UrlValidator::ValidateUrl($foundImgUrl);
-				if ($isValid === false) {
-					array_push($brokenImagesLinks, $foundImgUrl);
+			if ($html === -1)
+				return [];
+
+			$html = new simple_html_dom($html);
+			foreach ($html->find('img') as $foundImgTag) {
+				var_dump($foundImgTag->src);
+
+				if (empty($foundImgTag->src)) {
+					continue;
 				}
-//					$foundHtml = $sel->{$fieldInfo["attrVal" . $i]};
+
+				$absoluteUrl = UrlValidator::GetAbsoluteUrl($foundImgTag->src, $this->url);
+				if (!UrlValidator::UrlExists($absoluteUrl)) {
+					array_push($this->brokenImagesLinks, $foundImgTag->src);
+				}
 			}
 
-			return $brokenImagesLinks;
+			return $this->brokenImagesLinks;
 		} catch (\Exception $ex) {
 			die($ex);
 		}
